@@ -48,7 +48,7 @@
     .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
     header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
     h1 { font: 500 34px/1.05 Georgia, "Iowan Old Style", serif; margin: 0 0 8px; letter-spacing: -0.03em; }
-    .lede { margin: 0; max-width: 62ch; color: var(--muted); }
+    .lede { margin: 0; max-width: 68ch; color: var(--muted); }
     button.theme {
       border: 1px solid var(--line);
       background: var(--card);
@@ -58,9 +58,10 @@
       font: inherit;
       cursor: pointer;
     }
+    .stamp { margin: 10px 0 0; font-size: 13px; color: var(--ink); }
     .overview {
       display: grid;
-      grid-template-columns: 1.4fr 0.8fr;
+      grid-template-columns: 1.5fr 0.8fr;
       gap: 14px;
       margin-top: 22px;
     }
@@ -81,24 +82,26 @@
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat strong { display: block; font: 500 22px/1.2 Georgia, serif; }
     .stat span { color: var(--muted); font-size: 13px; }
-    #map {
-      height: 280px;
-      border-radius: 12px;
-      background: var(--map-bg);
-    }
+    #map { height: 320px; border-radius: 12px; background: var(--map-bg); }
     .map-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .pin {
+      width: 28px; height: 28px; margin-left: -14px; margin-top: -28px;
+      border-radius: 14px 14px 14px 2px;
+      background: var(--accent);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font: 700 13px/1 ui-sans-serif, system-ui, sans-serif;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }
+    html[data-theme="dark"] .pin { color: #122018; border-color: #1b1f1c; }
     .filters { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; margin: 18px 0 10px; }
     label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
     .check { flex-direction: row; align-items: center; gap: 8px; padding-bottom: 8px; }
     input[type="number"], select {
-      font: inherit;
-      font-size: 14px;
-      color: var(--ink);
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 8px 10px;
-      min-width: 150px;
+      font: inherit; font-size: 14px; color: var(--ink);
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 10px; padding: 8px 10px; min-width: 150px;
     }
     .meta { color: var(--muted); font-size: 13px; margin: 4px 0 12px; }
     table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
@@ -113,8 +116,7 @@
     .badge {
       display: inline-block;
       font: 11px/1 ui-sans-serif, system-ui, sans-serif;
-      padding: 4px 7px;
-      border-radius: 999px;
+      padding: 4px 7px; border-radius: 999px;
       background: color-mix(in srgb, var(--ink) 8%, transparent);
       margin: 4px 4px 0 0;
     }
@@ -134,16 +136,17 @@
     <header>
       <div>
         <h1>Midea PortaSplit</h1>
-        <p class="lede">Swiss first-party prices, only when a shop page or that shop’s own API returned them. No guessed numbers.</p>
+        <p class="lede">Swiss shops we could actually read. A price is shown only when that shop’s page or API returned it. Shops that blocked the pull are left off.</p>
+        <p class="stamp" id="stamp"></p>
       </div>
       <button class="theme" id="theme" type="button" aria-pressed="false">Dark mode</button>
     </header>
 
     <section class="overview">
       <div class="card">
-        <h2>Branch stock</h2>
+        <h2>Shop locations</h2>
         <div id="map"></div>
-        <p class="map-note" id="mapNote"></p>
+        <p class="map-note">A pin is a published address, not a confirmed stock count. The mark is a unit count only when the shop reported one. ? means no count was published.</p>
       </div>
       <div class="card">
         <h2>This pull</h2>
@@ -176,33 +179,105 @@
       </thead>
       <tbody id="rows"></tbody>
     </table>
-    <footer>Toppreise is a comparison source, not a seller. A pin appears only when a shop reports how many units are at a specific store. Snapshot refreshes when the shops are pulled again.</footer>
+    <footer>Blocked shops are omitted, including Digitec and Galaxus. Toppreise is not a seller. Refresh by pulling the readable shop pages again and publishing this site.</footer>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const payload = {
-      updated_at: "2026-09-08T20:12:00Z",
-      stores: [],
+      updated_at: "2026-09-08T20:45:03Z",
+      pins: [
+        {
+          shop: "Interdiscount",
+          address: "Bernstrasse 90, 3303 Jegenstorf",
+          lat: 47.0416785,
+          lon: 7.5033084,
+          units: null,
+          label: "HQ / contact address from their impressum. Not a branch stock count."
+        },
+        {
+          shop: "Ecofort",
+          address: "Ipsachstrasse 16, 2560 Nidau",
+          lat: 47.1188527,
+          lon: 7.2399965,
+          units: null,
+          label: "Showroom address from their contact page. Not a branch stock count."
+        },
+        {
+          shop: "Venova",
+          address: "Chassellas 114, 7537 Müstair",
+          lat: 46.6176242,
+          lon: 10.4455534,
+          units: null,
+          label: "Published pickup address. Map match is the street in Müstair, not a verified building. Unit count not published."
+        }
+      ],
       listings: [
-        {"shop":"Interdiscount","product_name":"MIDEA Klimagerät PortaSplit Cool (70 m3, 8000 BTU/h, EU-Version)","model":"PORTASPLIT COOL","kw":null,"btu":8000,"year":null,"price_chf":999.95,"price_note":"CHF 999.95. VAT not stated on the shop JSON. Comparison price CHF 1'799.95.","stock":"unknown","stock_text":"Shop JSON: ONORDER, deliveryDays 180. Product page did not render, so no customer-facing stock sentence.","ships_home":"unknown","pickup_only":false,"fulfillment_note":"Home delivery not confirmed. Shop JSON disagrees on delivery. Not pickup-only.","url":"https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094","seller_type":"first_party","checked_at":"2026-09-08T20:09:32Z","blocked":false},
-        {"shop":"Interdiscount","product_name":"MIDEA Klimagerät PortaSplit (105 m3, 12000 BTU/h)","model":"PORTASPLIT","kw":3.5,"btu":12000,"year":null,"price_chf":1199.95,"price_note":"CHF 1'199.95. VAT not stated. Was CHF 1'999.95. Not labeled A023080.","stock":"out_of_stock","stock_text":"Zur Zeit nicht lieferbar","ships_home":"no","pickup_only":false,"fulfillment_note":"Home delivery is a channel, but the item is not currently deliverable. Not pickup-only.","url":"https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750","seller_type":"first_party","checked_at":"2026-09-08T20:09:32Z","blocked":false},
-        {"shop":"Ecofort","product_name":"Midea PortaSplit","model":"A023080","kw":3.5,"btu":12000,"year":null,"price_chf":1349,"price_note":"CHF 1'349.– inkl. MwSt. Versandkostenfrei.","stock":"unknown","stock_text":"Button says Jetzt vorbestellen. Marketing page says sofort lieferbar. Shopify available true. Not classified.","ships_home":"yes","pickup_only":false,"fulfillment_note":"Ships in Switzerland by Swiss Post Cargo. Gratis Lieferung. Pickup not verified.","url":"https://ecofort.ch/products/midea-portasplit","seller_type":"first_party","checked_at":"2026-09-08T20:09:32Z","blocked":false},
-        {"shop":"Venova","product_name":"Midea PortaSplit - Split-Klimaanlage, 12.000 BTU","model":"A023080","kw":3.5,"btu":12000,"year":null,"price_chf":1659,"price_note":"CHF 1'659.00 inkl. MwSt. Page does not print A023080; GTIN matches Ecofort A023080.","stock":"in_stock","stock_text":"Sofort verfügbar","ships_home":"yes","pickup_only":false,"fulfillment_note":"Ships. Versandkosten shown as 0.00 CHF. Stückgut to the curb, about 2–4 working days.","url":"https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a","seller_type":"first_party","checked_at":"2026-09-08T20:08:46Z","blocked":false},
-        {"shop":"Digitec","product_name":"Midea Porta Split","model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"Price unknown. Shop page blocked.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.digitec.ch/de/s1/product/midea-porta-split-42-m-1194250-btuh-klimaanlage-40851329","seller_type":"unknown","checked_at":"2026-09-08T20:08:46Z","blocked":true,"block_reason":"Captcha / HTTP 403. Price not copied from search snippets."},
-        {"shop":"Galaxus","product_name":"Midea Porta Split","model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"Price unknown. Shop page blocked.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.galaxus.ch/de/s1/product/midea-porta-split-42-m-1194250-btuh-klimaanlage-40851329","seller_type":"unknown","checked_at":"2026-09-08T20:08:46Z","blocked":true,"block_reason":"Captcha / HTTP 403. Price not copied from search snippets."},
-        {"shop":"Microspot","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"No verified listing. Search redirected and was blocked.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.microspot.ch/de/search?search=PortaSplit","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":true,"block_reason":"Redirected to Interdiscount, then captcha."},
-        {"shop":"Fust","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"Price unknown. Indexed product page returned 403.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.fust.ch/haushalt/heizen-lueften-klima/klimaanlage/comfee-portasplit-/p/10818199","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":true,"block_reason":"HTTP 403 on the product page and search."},
-        {"shop":"Melectronics","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"No verified listing. Search page did not return a product payload.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.melectronics.ch/de/s?q=PortaSplit","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":true,"block_reason":"JavaScript shell only. No product JSON."},
-        {"shop":"Brack","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"No verified listing. Search did not return a page.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.brack.ch/search?query=PortaSplit","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":true,"block_reason":"Search timed out with an empty body."},
-        {"shop":"Jumbo","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"No verified listing. Search blocked.","stock":"unknown","stock_text":"unknown","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.jumbo.ch/de/search?text=PortaSplit","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":true,"block_reason":"DataDome captcha."},
-        {"shop":"OBI","product_name":null,"model":null,"kw":null,"btu":null,"year":null,"price_chf":null,"price_note":"No PortaSplit listing on the search pages that opened. Old product URL is 404.","stock":"unknown","stock_text":"no listing found","ships_home":"unknown","pickup_only":false,"fulfillment_note":"unknown","url":"https://www.obi.ch/fr/search/climatiseur%20mobile/","seller_type":"unknown","checked_at":"2026-09-08T20:09:32Z","blocked":false}
+        {
+          shop: "Interdiscount",
+          product_name: "MIDEA Klimagerät PortaSplit Cool (70 m3, 8000 BTU/h, EU-Version)",
+          model: "PORTASPLIT COOL",
+          kw: null, btu: 8000, year: null,
+          price_chf: 999.95,
+          price_note: "CHF 999.95 from Interdiscount OCC JSON. VAT not stated. Comparison price CHF 1'799.95.",
+          stock: "unknown",
+          stock_text: "ONORDER, purchasable, deliveryDays 180. No customer-facing stock sentence. API stockLevel is not a branch count.",
+          ships_home: "unknown",
+          pickup_only: false,
+          fulfillment_note: "neutralDeliveryPossible false on the product JSON. Home delivery not confirmed.",
+          url: "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094",
+          checked_at: "2026-09-08T20:45:03Z"
+        },
+        {
+          shop: "Interdiscount",
+          product_name: "MIDEA Klimagerät PortaSplit (105 m3, 12000 BTU/h)",
+          model: "PORTASPLIT",
+          kw: 3.5, btu: 12000, year: null,
+          price_chf: 1199.95,
+          price_note: "CHF 1'199.95 from Interdiscount OCC JSON. VAT not stated. Was CHF 1'999.95. Not labeled A023080.",
+          stock: "out_of_stock",
+          stock_text: "ONORDER, purchasable false. Earlier page text: Zur Zeit nicht lieferbar.",
+          ships_home: "no",
+          pickup_only: false,
+          fulfillment_note: "Not currently deliverable. Not pickup-only.",
+          url: "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750",
+          checked_at: "2026-09-08T20:45:03Z"
+        },
+        {
+          shop: "Ecofort",
+          product_name: "Midea PortaSplit",
+          model: "A023080",
+          kw: 3.5, btu: 12000, year: null,
+          price_chf: 1349,
+          price_note: "CHF 1'349.00 from Shopify product.js. Earlier page said inkl. MwSt.",
+          stock: "unknown",
+          stock_text: "Shopify available true. Page previously disagreed (preorder vs sofort lieferbar). Not classified.",
+          ships_home: "yes",
+          pickup_only: false,
+          fulfillment_note: "Ships in Switzerland. Pickup count not published.",
+          url: "https://ecofort.ch/products/midea-portasplit",
+          checked_at: "2026-09-08T20:45:03Z"
+        },
+        {
+          shop: "Venova",
+          product_name: "Midea PortaSplit - Split-Klimaanlage, 12.000 BTU",
+          model: "A023080",
+          kw: 3.5, btu: 12000, year: null,
+          price_chf: 1659,
+          price_note: "CHF 1'659.00 on the product page. inkl. MwSt. on the earlier page text.",
+          stock: "in_stock",
+          stock_text: "Sofort verfügbar still present on the product page.",
+          ships_home: "yes",
+          pickup_only: false,
+          fulfillment_note: "Ships. Pickup is offered in Müstair, but no unit count was published.",
+          url: "https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a",
+          checked_at: "2026-09-08T20:45:03Z"
+        }
       ]
     };
 
     const fmt = new Intl.NumberFormat("de-CH", { style: "currency", currency: "CHF" });
     const themeBtn = document.getElementById("theme");
-
     function applyTheme(theme) {
       document.documentElement.dataset.theme = theme;
       const dark = theme === "dark";
@@ -223,20 +298,21 @@
       if (Number.isNaN(d.getTime())) return "unknown";
       return new Intl.DateTimeFormat("en-GB", {
         timeZone: "Europe/Zurich",
-        day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+        day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit",
         timeZoneName: "short"
       }).format(d);
     }
+    document.getElementById("stamp").textContent = "Prices pulled " + zurich(payload.updated_at);
+
     function modelLabel(row) {
       const bits = [];
       if (row.model) bits.push(row.model);
       if (row.kw != null) bits.push(row.kw + " kW");
       if (row.btu != null) bits.push(row.btu + " BTU");
-      if (row.year != null) bits.push(String(row.year));
       return bits.join(" · ") || "PortaSplit";
     }
     function passes(row) {
-      if (row.seller_type === "marketplace") return false;
       if (document.getElementById("inStock").checked && row.stock !== "in_stock") return false;
       if (document.getElementById("ships").checked && row.ships_home !== "yes") return false;
       const raw = document.getElementById("max").value;
@@ -259,7 +335,6 @@
       if (row.stock === "out_of_stock") return '<span class="badge no">Out of stock</span>';
       return '<span class="badge">Stock unknown</span>';
     }
-
     function render() {
       const listings = payload.listings;
       const priced = listings.filter(r => r.price_chf != null);
@@ -268,65 +343,51 @@
       const current = sel.value;
       sel.innerHTML = '<option value="">All PortaSplit</option>' + models.map(m => `<option>${m}</option>`).join("");
       if ([...sel.options].some(o => o.value === current)) sel.value = current;
-
       const cheapest = priced.slice().sort((a, b) => a.price_chf - b.price_chf)[0];
-      const blocked = listings.filter(r => r.blocked).length;
       document.getElementById("stats").innerHTML = `
         <div class="stat"><strong>${cheapest ? fmt.format(cheapest.price_chf) : "—"}</strong><span>Lowest verified price${cheapest ? ", " + cheapest.shop : ""}</span></div>
-        <div class="stat"><strong>${priced.length}</strong><span>Shops with a verified price</span></div>
-        <div class="stat"><strong>${payload.stores.length}</strong><span>Stores with a reported unit count</span></div>
-        <div class="stat"><strong>${zurich(payload.updated_at)}</strong><span>Last pull</span></div>`;
-
-      const stores = payload.stores.filter(s => Number.isFinite(s.units) && s.lat != null && s.lng != null && s.name);
-      document.getElementById("mapNote").textContent = stores.length
-        ? stores.map(s => `${s.name}: ${s.units} units`).join(" · ")
-        : "No pins. No shop reported how many PortaSplit units are in a specific store. Web-only stock is not plotted.";
-
-      const rows = listings.filter(passes).sort((a, b) => {
-        const ap = a.price_chf == null ? 1 : 0;
-        const bp = b.price_chf == null ? 1 : 0;
-        if (ap !== bp) return ap - bp;
-        return (a.price_chf || 0) - (b.price_chf || 0);
-      });
-      const body = document.getElementById("rows");
-      body.innerHTML = rows.length ? rows.map(row => {
+        <div class="stat"><strong>${priced.length}</strong><span>Readable listings with a price</span></div>
+        <div class="stat"><strong>${payload.pins.length}</strong><span>Location pins, none with a unit count</span></div>
+        <div class="stat"><strong>${zurich(payload.updated_at)}</strong><span>Prices pulled</span></div>`;
+      const rows = listings.filter(passes).sort((a, b) => (a.price_chf || 0) - (b.price_chf || 0));
+      document.getElementById("rows").innerHTML = rows.length ? rows.map(row => {
         const muted = row.pickup_only || row.ships_home === "no";
-        const extra = [row.fulfillment_note, row.blocked ? (row.block_reason || "blocked") : ""].filter(Boolean).join(" ");
         const name = row.url ? `<a href="${row.url}" target="_blank" rel="noopener">${row.shop}</a>` : row.shop;
         return `<tr class="${muted ? "muted" : ""}">
           <td><div class="shop">${name}</div></td>
-          <td>${row.product_name || "Midea PortaSplit"}<div class="model">${modelLabel(row)}</div></td>
-          <td class="price">${row.price_chf == null ? "—" : fmt.format(row.price_chf)}${row.price_note ? `<div class="note">${row.price_note}</div>` : ""}</td>
-          <td>${stockCell(row)}${row.stock_text ? `<div class="note">${row.stock_text}</div>` : ""}</td>
-          <td>${shipCell(row)}${extra ? `<div class="note">${extra}</div>` : ""}</td>
+          <td>${row.product_name}<div class="model">${modelLabel(row)}</div></td>
+          <td class="price">${fmt.format(row.price_chf)}<div class="note">${row.price_note}</div></td>
+          <td>${stockCell(row)}<div class="note">${row.stock_text}</div></td>
+          <td>${shipCell(row)}<div class="note">${row.fulfillment_note}</div></td>
           <td>${zurich(row.checked_at)}</td>
         </tr>`;
       }).join("") : '<tr><td class="empty" colspan="6">Nothing matches these filters.</td></tr>';
-      document.getElementById("meta").textContent = `${rows.length} shown · ${listings.length} shops checked · ${blocked} blocked`;
-      return stores;
+      document.getElementById("meta").textContent = `${rows.length} shown · ${listings.length} readable listings · blocked shops omitted`;
     }
-
-    function drawMap(stores) {
+    function drawMap() {
       if (!window.L) {
-        document.getElementById("map").textContent = "Map tiles did not load. No store counts to plot anyway.";
+        document.getElementById("map").textContent = "Map tiles did not load.";
         return;
       }
-      const map = L.map("map", { scrollWheelZoom: false }).setView([46.82, 8.23], 7);
+      const map = L.map("map", { scrollWheelZoom: false }).setView([46.9, 8.2], 7);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 18,
         attribution: "&copy; OpenStreetMap"
       }).addTo(map);
-      stores.forEach(s => {
-        L.marker([s.lat, s.lng]).addTo(map).bindPopup(`${s.name}<br>${s.units} units`);
+      payload.pins.forEach(pin => {
+        const mark = pin.units == null ? "?" : String(pin.units);
+        const icon = L.divIcon({ className: "", html: `<div class="pin">${mark}</div>`, iconSize: [28, 28] });
+        L.marker([pin.lat, pin.lon], { icon }).addTo(map).bindPopup(
+          `<strong>${pin.shop}</strong><br>${pin.address}<br>${pin.label}<br>Units: ${pin.units == null ? "?" : pin.units}`
+        );
       });
     }
-
     ["inStock", "ships", "max", "model"].forEach(id => {
       document.getElementById(id).addEventListener("input", render);
       document.getElementById(id).addEventListener("change", render);
     });
-    const stores = render();
-    drawMap(stores);
+    render();
+    drawMap();
   </script>
 </body>
 </html>
