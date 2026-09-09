@@ -3,132 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PortaSplit · Switzerland</title>
+  <title>PortaSplit · CH + DE border</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    :root {
-      --bg: #f4efe8;
-      --ink: #1b1916;
-      --muted: #6d675f;
-      --line: #e3dbd0;
-      --card: #fffdf9;
-      --accent: #1f6b5a;
-      --accent-soft: #e5f0eb;
-      --warn: #8a5a2b;
-      --warn-bg: #f4eadc;
-      --bad: #8b3d3d;
-      --bad-bg: #f6e6e3;
-      --shadow: 0 10px 30px rgba(40, 32, 22, 0.05);
-      --map-bg: #e7efe8;
-    }
-    html[data-theme="dark"] {
-      --bg: #121412;
-      --ink: #ece7df;
-      --muted: #a39c92;
-      --line: #2a2d2a;
-      --card: #1b1f1c;
-      --accent: #8fbfa8;
-      --accent-soft: #24342d;
-      --warn: #e2b27a;
-      --warn-bg: #2c241c;
-      --bad: #e7a8a2;
-      --bad-bg: #2c1d1c;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      --map-bg: #1a221d;
-    }
+    :root { --bg:#f4efe8; --ink:#1b1916; --muted:#6d675f; --line:#e3dbd0; --card:#fffdf9; --accent:#1f6b5a; --accent-soft:#e5f0eb; --warn:#8a5a2b; --warn-bg:#f4eadc; --bad:#8b3d3d; --bad-bg:#f6e6e3; --de:#3b4f7a; --de-soft:#e8ecf5; --shadow:0 10px 30px rgba(40,32,22,.05); --map-bg:#e7efe8; }
+    html[data-theme="dark"] { --bg:#121412; --ink:#ece7df; --muted:#a39c92; --line:#2a2d2a; --card:#1b1f1c; --accent:#8fbfa8; --accent-soft:#24342d; --warn:#e2b27a; --warn-bg:#2c241c; --bad:#e7a8a2; --bad-bg:#2c1d1c; --de:#9db0d8; --de-soft:#232938; --shadow:0 10px 30px rgba(0,0,0,.25); --map-bg:#1a221d; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font: 15px/1.5 "Avenir Next", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(900px 420px at 10% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
-        var(--bg);
-    }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
-    header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
-    h1 { font: 500 34px/1.05 Georgia, "Iowan Old Style", serif; margin: 0 0 8px; letter-spacing: -0.03em; }
-    .lede { margin: 0; max-width: 68ch; color: var(--muted); }
-    button.theme {
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--ink);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font: inherit;
-      cursor: pointer;
-    }
-    .stamp { margin: 10px 0 0; font-size: 13px; color: var(--ink); }
-    .overview {
-      display: grid;
-      grid-template-columns: 1.5fr 0.8fr;
-      gap: 14px;
-      margin-top: 22px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      padding: 16px 16px 14px;
-    }
-    .card h2 {
-      margin: 0 0 8px;
-      font: 600 12px/1.2 ui-sans-serif, system-ui, sans-serif;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat strong { display: block; font: 500 22px/1.2 Georgia, serif; }
-    .stat span { color: var(--muted); font-size: 13px; }
-    #map { height: 320px; border-radius: 12px; background: var(--map-bg); }
-    .map-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
-    .pin {
-      width: 28px; height: 28px; margin-left: -14px; margin-top: -28px;
-      border-radius: 14px 14px 14px 2px;
-      background: var(--accent);
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font: 700 13px/1 ui-sans-serif, system-ui, sans-serif;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,.25);
-    }
-    html[data-theme="dark"] .pin { color: #122018; border-color: #1b1f1c; }
-    .filters { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; margin: 18px 0 10px; }
-    label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
-    .check { flex-direction: row; align-items: center; gap: 8px; padding-bottom: 8px; }
-    input[type="number"], select {
-      font: inherit; font-size: 14px; color: var(--ink);
-      background: var(--card); border: 1px solid var(--line);
-      border-radius: 10px; padding: 8px 10px; min-width: 150px;
-    }
-    .meta { color: var(--muted); font-size: 13px; margin: 4px 0 12px; }
-    table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-    th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { font-size: 12px; color: var(--muted); font-weight: 600; }
-    tr:last-child td { border-bottom: 0; }
-    tr.muted { opacity: 0.72; }
-    a { color: var(--accent); }
-    .shop { font-weight: 600; }
-    .model, .note { color: var(--muted); font-size: 13px; }
-    .price { font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .badge {
-      display: inline-block;
-      font: 11px/1 ui-sans-serif, system-ui, sans-serif;
-      padding: 4px 7px; border-radius: 999px;
-      background: color-mix(in srgb, var(--ink) 8%, transparent);
-      margin: 4px 4px 0 0;
-    }
-    .badge.ok { background: var(--accent-soft); color: var(--accent); }
-    .badge.warn { background: var(--warn-bg); color: var(--warn); }
-    .badge.no { background: var(--bad-bg); color: var(--bad); }
-    .empty { padding: 24px; color: var(--muted); }
-    footer { color: var(--muted); font-size: 13px; margin-top: 16px; }
-    @media (max-width: 800px) {
-      .overview, .stats { grid-template-columns: 1fr; }
-      h1 { font-size: 28px; }
-    }
+    body { margin:0; font:15px/1.5 "Avenir Next","Segoe UI",sans-serif; color:var(--ink); background:radial-gradient(900px 420px at 10% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%), var(--bg); }
+    .wrap { max-width:1120px; margin:0 auto; padding:28px 20px 40px; }
+    header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+    h1 { font:500 34px/1.05 Georgia,"Iowan Old Style",serif; margin:0 0 8px; letter-spacing:-.03em; }
+    .lede { margin:0; max-width:68ch; color:var(--muted); }
+    button.theme { border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:8px 12px; font:inherit; cursor:pointer; }
+    .stamp { margin:10px 0 0; font-size:13px; }
+    .overview { display:grid; grid-template-columns:1.5fr .8fr; gap:14px; margin-top:22px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:16px; }
+    .card h2 { margin:0 0 8px; font:600 12px/1.2 ui-sans-serif,system-ui,sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+    .stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .stat strong { display:block; font:500 20px/1.2 Georgia,serif; }
+    .stat span { color:var(--muted); font-size:13px; }
+    #map { height:340px; border-radius:12px; background:var(--map-bg); }
+    .map-note { margin:8px 0 0; color:var(--muted); font-size:13px; }
+    .pin { width:28px; height:28px; margin-left:-14px; margin-top:-28px; border-radius:14px 14px 14px 2px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font:700 12px/1 ui-sans-serif,system-ui,sans-serif; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,.25); }
+    .pin.de { background:var(--de); }
+    html[data-theme="dark"] .pin { color:#122018; border-color:#1b1f1c; }
+    .filters { display:flex; flex-wrap:wrap; gap:12px 16px; align-items:end; margin:18px 0 10px; }
+    label { display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--muted); }
+    .check { flex-direction:row; align-items:center; gap:8px; padding-bottom:8px; }
+    input[type="number"], select { font:inherit; font-size:14px; color:var(--ink); background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 10px; min-width:140px; }
+    .meta { color:var(--muted); font-size:13px; margin:4px 0 12px; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+    th, td { text-align:left; padding:12px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { font-size:12px; color:var(--muted); font-weight:600; }
+    tr:last-child td { border-bottom:0; }
+    tr.muted { opacity:.72; }
+    a { color:var(--accent); }
+    .shop { font-weight:600; }
+    .model, .note { color:var(--muted); font-size:13px; }
+    .price { font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .badge { display:inline-block; font:11px/1 ui-sans-serif,system-ui,sans-serif; padding:4px 7px; border-radius:999px; background:color-mix(in srgb, var(--ink) 8%, transparent); margin:4px 4px 0 0; }
+    .badge.ok { background:var(--accent-soft); color:var(--accent); }
+    .badge.warn { background:var(--warn-bg); color:var(--warn); }
+    .badge.no { background:var(--bad-bg); color:var(--bad); }
+    .badge.de { background:var(--de-soft); color:var(--de); }
+    .empty { padding:24px; color:var(--muted); }
+    footer { color:var(--muted); font-size:13px; margin-top:16px; }
+    @media (max-width:800px){ .overview,.stats{grid-template-columns:1fr;} h1{font-size:28px;} }
   </style>
 </head>
 <body>
@@ -136,147 +56,53 @@
     <header>
       <div>
         <h1>Midea PortaSplit</h1>
-        <p class="lede">Swiss shops we could actually read. A price is shown only when that shop’s page or API returned it. Shops that blocked the pull are left off.</p>
+        <p class="lede">Swiss first-party shops in CHF, plus German chain shops near the Swiss border in EUR. Prices only when a shop page returned them. No fake currency conversion.</p>
         <p class="stamp" id="stamp"></p>
       </div>
       <button class="theme" id="theme" type="button" aria-pressed="false">Dark mode</button>
     </header>
-
     <section class="overview">
-      <div class="card">
-        <h2>Shop locations</h2>
-        <div id="map"></div>
-        <p class="map-note">A pin is a published address, not a confirmed stock count. The mark is a unit count only when the shop reported one. ? means no count was published.</p>
-      </div>
-      <div class="card">
-        <h2>This pull</h2>
-        <div class="stats" id="stats"></div>
-      </div>
+      <div class="card"><h2>Shop locations</h2><div id="map"></div><p class="map-note">A number on a pin is a real unit count from that shop. ? means no count was published. Green pins are CH addresses; blue pins are DE stores.</p></div>
+      <div class="card"><h2>This pull</h2><div class="stats" id="stats"></div></div>
     </section>
-
     <div class="filters">
       <label class="check"><input id="inStock" type="checkbox" /> In stock</label>
-      <label class="check"><input id="ships" type="checkbox" /> Ships to home</label>
-      <label>Price max (CHF)
-        <input id="max" type="number" min="0" step="10" placeholder="No max" />
-      </label>
-      <label>Model
-        <select id="model"><option value="">All PortaSplit</option></select>
-      </label>
+      <label class="check"><input id="ships" type="checkbox" /> Ships / pickup usable</label>
+      <label>Country<select id="country"><option value="">CH + DE</option><option value="CH">Switzerland</option><option value="DE">Germany</option></select></label>
+      <label>Price max<input id="max" type="number" min="0" step="10" placeholder="No max" /></label>
+      <label>Model<select id="model"><option value="">All PortaSplit</option></select></label>
     </div>
     <p class="meta" id="meta"></p>
-
     <table>
-      <thead>
-        <tr>
-          <th>Shop</th>
-          <th>Model</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>Ships</th>
-          <th>Checked</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Shop</th><th>Model</th><th>Price</th><th>Stock</th><th>Ships / pickup</th><th>Checked</th></tr></thead>
       <tbody id="rows"></tbody>
     </table>
-    <footer>Blocked shops are omitted, including Digitec and Galaxus. Toppreise is not a seller. Refresh by pulling the readable shop pages again and publishing this site.</footer>
+    <footer>Blocked DE shops omitted: Hornbach, Bauhaus, toom. Marketplace sellers skipped. EUR and CHF stay separate.</footer>
   </div>
-
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const payload = {
-      updated_at: "2026-09-09T21:14:11Z",
-      pins: [
-        {
-          shop: "Interdiscount",
-          address: "Bernstrasse 90, 3303 Jegenstorf",
-          lat: 47.0416785,
-          lon: 7.5033084,
-          units: null,
-          label: "HQ / contact address from their impressum. Not a branch stock count."
-        },
-        {
-          shop: "Ecofort",
-          address: "Ipsachstrasse 16, 2560 Nidau",
-          lat: 47.1188527,
-          lon: 7.2399965,
-          units: null,
-          label: "Showroom address from their contact page. Not a branch stock count."
-        },
-        {
-          shop: "Venova",
-          address: "Chassellas 114, 7537 Müstair",
-          lat: 46.6176242,
-          lon: 10.4455534,
-          units: null,
-          label: "Published pickup address. Map match is the street in Müstair, not a verified building. Unit count not published."
-        }
-      ],
-      listings: [
-        {
-          shop: "Interdiscount",
-          product_name: "MIDEA Klimagerät PortaSplit Cool (70 m3, 8000 BTU/h, EU-Version)",
-          model: "PORTASPLIT COOL",
-          kw: null, btu: 8000, year: null,
-          price_chf: 999.95,
-          price_note: "CHF 999.95 from Interdiscount OCC JSON. VAT not stated. Comparison price CHF 1'799.95.",
-          stock: "in_stock",
-          stock_text: "INSTOCK, purchasable, deliveryDays 5. No customer-facing stock sentence. API stockLevel is not a branch count.",
-          ships_home: "unknown",
-          pickup_only: false,
-          fulfillment_note: "neutralDeliveryPossible false on the product JSON. Home delivery not confirmed.",
-          url: "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094",
-          checked_at: "2026-09-09T21:14:11Z"
-        },
-        {
-          shop: "Interdiscount",
-          product_name: "MIDEA Klimagerät PortaSplit (105 m3, 12000 BTU/h)",
-          model: "PORTASPLIT",
-          kw: 3.5, btu: 12000, year: null,
-          price_chf: 1199.95,
-          price_note: "CHF 1'199.95 from Interdiscount OCC JSON. VAT not stated. Was CHF 1'999.95. Not labeled A023080.",
-          stock: "out_of_stock",
-          stock_text: "ONORDER, purchasable false, deliveryDays 57. Not currently deliverable.",
-          ships_home: "no",
-          pickup_only: false,
-          fulfillment_note: "Not currently deliverable. Not pickup-only.",
-          url: "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750",
-          checked_at: "2026-09-09T21:14:11Z"
-        },
-        {
-          shop: "Ecofort",
-          product_name: "Midea PortaSplit",
-          model: "A023080",
-          kw: 3.5, btu: 12000, year: null,
-          price_chf: 1349,
-          price_note: "CHF 1'349.00 from Shopify product.js. Earlier page said inkl. MwSt.",
-          stock: "unknown",
-          stock_text: "Shopify available true. Page previously disagreed (preorder vs sofort lieferbar). Not classified.",
-          ships_home: "yes",
-          pickup_only: false,
-          fulfillment_note: "Ships in Switzerland. Pickup count not published.",
-          url: "https://ecofort.ch/products/midea-portasplit",
-          checked_at: "2026-09-09T21:14:11Z"
-        },
-        {
-          shop: "Venova",
-          product_name: "Midea PortaSplit - Split-Klimaanlage, 12.000 BTU",
-          model: "A023080",
-          kw: 3.5, btu: 12000, year: null,
-          price_chf: 1659,
-          price_note: "CHF 1'659.00 on the product page. inkl. MwSt. on the earlier page text.",
-          stock: "in_stock",
-          stock_text: "Sofort verfügbar still present on the product page.",
-          ships_home: "yes",
-          pickup_only: false,
-          fulfillment_note: "Ships. Pickup is offered in Müstair, but no unit count was published.",
-          url: "https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a",
-          checked_at: "2026-09-09T21:14:11Z"
-        }
-      ]
-    };
-
-    const fmt = new Intl.NumberFormat("de-CH", { style: "currency", currency: "CHF" });
+  "updated_at": "2026-09-09T21:41:40Z",
+  "pins": [
+    {"shop":"Interdiscount","country":"CH","address":"Bernstrasse 90, 3303 Jegenstorf","lat":47.0416785,"lon":7.5033084,"units":null,"label":"HQ / contact address from their impressum. Not a branch stock count."},
+    {"shop":"Ecofort","country":"CH","address":"Ipsachstrasse 16, 2560 Nidau","lat":47.1188527,"lon":7.2399965,"units":null,"label":"Showroom address from their contact page. Not a branch stock count."},
+    {"shop":"Venova","country":"CH","address":"Chassellas 114, 7537 Müstair","lat":46.6176242,"lon":10.4455534,"units":null,"label":"Published pickup address. Unit count not published."},
+    {"shop":"OBI Singen","country":"DE","address":"Georg-Fischer-Strasse 29, 78224 Singen","lat":47.7538412,"lon":8.8513444,"units":23,"label":"OBI store stock for PortaSplit Cool only: 23 Stück auf Lager. Classic was not in stock at this store."},
+    {"shop":"OBI Freiburg Süd","country":"DE","address":"Munzinger Straße 6, 79111 Freiburg","lat":47.9900631,"lon":7.7932730,"units":0,"label":"Checked for classic and Cool: zzt. nicht auf Lager."}
+  ],
+  "listings": [
+    {"country":"CH","currency":"CHF","shop":"Interdiscount","product_name":"MIDEA Klimagerät PortaSplit Cool (70 m3, 8000 BTU/h, EU-Version)","model":"PORTASPLIT COOL","kw":null,"btu":8000,"price":999.95,"price_note":"CHF 999.95 from Interdiscount OCC JSON. VAT not stated.","stock":"in_stock","stock_text":"INSTOCK, purchasable, deliveryDays 5.","ships_home":"unknown","pickup_only":false,"usable":false,"fulfillment_note":"Home delivery not confirmed.","url":"https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"CH","currency":"CHF","shop":"Interdiscount","product_name":"MIDEA Klimagerät PortaSplit (105 m3, 12000 BTU/h)","model":"PORTASPLIT","kw":3.5,"btu":12000,"price":1199.95,"price_note":"CHF 1'199.95 from Interdiscount OCC JSON. VAT not stated.","stock":"out_of_stock","stock_text":"ONORDER, purchasable false, deliveryDays 57.","ships_home":"no","pickup_only":false,"usable":false,"fulfillment_note":"Not currently deliverable.","url":"https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"CH","currency":"CHF","shop":"Ecofort","product_name":"Midea PortaSplit","model":"A023080","kw":3.5,"btu":12000,"price":1349,"price_note":"CHF 1'349.00 from Shopify product.js.","stock":"unknown","stock_text":"Shopify available true. Stock not classified.","ships_home":"yes","pickup_only":false,"usable":true,"fulfillment_note":"Ships in Switzerland.","url":"https://ecofort.ch/products/midea-portasplit","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"CH","currency":"CHF","shop":"Venova","product_name":"Midea PortaSplit - Split-Klimaanlage, 12.000 BTU","model":"A023080","kw":3.5,"btu":12000,"price":1659,"price_note":"CHF 1'659.00 on the product page.","stock":"in_stock","stock_text":"Sofort verfügbar.","ships_home":"yes","pickup_only":false,"usable":true,"fulfillment_note":"Ships. Pickup offered in Müstair, no unit count published.","url":"https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"DE","currency":"EUR","shop":"Saturn","product_name":"MIDEA PortaSplit Cool","model":"PORTASPLIT COOL","kw":2.3,"btu":8000,"price":789.99,"price_note":"EUR 789.99 (UVP 899). First-party Saturn.","stock":"out_of_stock","stock_text":"TEMPORARILY_NOT_AVAILABLE / OutOfStock.","ships_home":"no","pickup_only":true,"usable":false,"fulfillment_note":"Leider keine Lieferung möglich. No border store stock verified.","url":"https://www.saturn.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"DE","currency":"EUR","shop":"MediaMarkt","product_name":"MIDEA PortaSplit Cool","model":"PORTASPLIT COOL","kw":2.3,"btu":8000,"price":789.99,"price_note":"EUR 789.99 (UVP 899). First-party MediaMarkt.","stock":"out_of_stock","stock_text":"TEMPORARILY_NOT_AVAILABLE / OutOfStock.","ships_home":"no","pickup_only":true,"usable":false,"fulfillment_note":"Leider keine Lieferung möglich. No border store stock verified.","url":"https://www.mediamarkt.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"DE","currency":"EUR","shop":"OBI","product_name":"Midea PortaSplit Cool Mobil Weißgrau","model":"PORTASPLIT COOL","kw":2.35,"btu":8000,"price":899.99,"price_note":"EUR 899.99 inkl. 19% MwSt.","stock":"in_stock","stock_text":"OBI Singen: 23 Stück auf Lager. Freiburg Süd/Nord, Waldshut, Konstanz, Lindau: zzt. nicht auf Lager.","ships_home":"no","pickup_only":true,"usable":true,"fulfillment_note":"Lieferung nach Hause derzeit nicht möglich. Reservieren & Abholen only. Not ship-to-CH.","url":"https://www.obi.de/p/2191158911022/midea-split-klimaanlage-portasplit-cool-mobil-weissgrau","checked_at":"2026-09-09T21:41:40Z"},
+    {"country":"DE","currency":"EUR","shop":"OBI","product_name":"Midea mobile Split-Klimaanlage PortaSplit","model":"PORTASPLIT","kw":3.5,"btu":12000,"price":899.99,"price_note":"EUR 899.99 inkl. 19% MwSt. Art. 8620890.","stock":"out_of_stock","stock_text":"Border-belt check: Freiburg Süd/Nord, Waldshut, Singen, Konstanz, Lindau all zzt. nicht auf Lager.","ships_home":"no","pickup_only":true,"usable":false,"fulfillment_note":"Lieferung nach Hause derzeit nicht möglich. Pickup-only when a market has stock.","url":"https://www.obi.de/p/8620890/midea-mobile-split-klimaanlage-portasplit","checked_at":"2026-09-09T21:41:40Z"}
+  ]
+};
+    const fmtCH = new Intl.NumberFormat("de-CH", { style: "currency", currency: "CHF" });
+    const fmtEU = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
     const themeBtn = document.getElementById("theme");
     function applyTheme(theme) {
       document.documentElement.dataset.theme = theme;
@@ -286,25 +112,19 @@
     }
     const saved = localStorage.getItem("portasplit-theme");
     applyTheme(saved === "dark" || saved === "light" ? saved : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
-    themeBtn.addEventListener("click", () => {
+    themeBtn.addEventListener("click", function () {
       const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       localStorage.setItem("portasplit-theme", next);
       applyTheme(next);
     });
-
     function zurich(iso) {
       if (!iso) return "unknown";
       const d = new Date(iso);
       if (Number.isNaN(d.getTime())) return "unknown";
-      return new Intl.DateTimeFormat("en-GB", {
-        timeZone: "Europe/Zurich",
-        day: "2-digit", month: "short", year: "numeric",
-        hour: "2-digit", minute: "2-digit",
-        timeZoneName: "short"
-      }).format(d);
+      return new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Zurich", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZoneName: "short" }).format(d);
     }
     document.getElementById("stamp").textContent = "Prices pulled " + zurich(payload.updated_at);
-
+    function money(row) { return row.currency === "EUR" ? fmtEU.format(row.price) : fmtCH.format(row.price); }
     function modelLabel(row) {
       const bits = [];
       if (row.model) bits.push(row.model);
@@ -314,11 +134,13 @@
     }
     function passes(row) {
       if (document.getElementById("inStock").checked && row.stock !== "in_stock") return false;
-      if (document.getElementById("ships").checked && row.ships_home !== "yes") return false;
+      if (document.getElementById("ships").checked && !row.usable) return false;
+      const country = document.getElementById("country").value;
+      if (country && row.country !== country) return false;
       const raw = document.getElementById("max").value;
       if (raw !== "") {
         const max = Number(raw);
-        if (Number.isFinite(max) && row.price_chf != null && row.price_chf > max) return false;
+        if (Number.isFinite(max) && row.price != null && row.price > max) return false;
       }
       const model = document.getElementById("model").value;
       if (model && modelLabel(row) !== model) return false;
@@ -327,7 +149,7 @@
     function shipCell(row) {
       if (row.pickup_only) return '<span class="badge warn">Pickup only</span>';
       if (row.ships_home === "yes") return '<span class="badge ok">Ships</span>';
-      if (row.ships_home === "no") return '<span class="badge warn">Not shipping now</span>';
+      if (row.ships_home === "no") return '<span class="badge warn">Not shipping</span>';
       return '<span class="badge">Ships unknown</span>';
     }
     function stockCell(row) {
@@ -337,52 +159,46 @@
     }
     function render() {
       const listings = payload.listings;
-      const priced = listings.filter(r => r.price_chf != null);
-      const models = [...new Set(priced.map(modelLabel))].sort();
+      const models = Array.from(new Set(listings.map(modelLabel))).sort();
       const sel = document.getElementById("model");
       const current = sel.value;
-      sel.innerHTML = '<option value="">All PortaSplit</option>' + models.map(m => `<option>${m}</option>`).join("");
-      if ([...sel.options].some(o => o.value === current)) sel.value = current;
-      const cheapest = priced.slice().sort((a, b) => a.price_chf - b.price_chf)[0];
-      document.getElementById("stats").innerHTML = `
-        <div class="stat"><strong>${cheapest ? fmt.format(cheapest.price_chf) : "—"}</strong><span>Lowest verified price${cheapest ? ", " + cheapest.shop : ""}</span></div>
-        <div class="stat"><strong>${priced.length}</strong><span>Readable listings with a price</span></div>
-        <div class="stat"><strong>${payload.pins.length}</strong><span>Location pins, none with a unit count</span></div>
-        <div class="stat"><strong>${zurich(payload.updated_at)}</strong><span>Prices pulled</span></div>`;
-      const rows = listings.filter(passes).sort((a, b) => (a.price_chf || 0) - (b.price_chf || 0));
-      document.getElementById("rows").innerHTML = rows.length ? rows.map(row => {
-        const muted = row.pickup_only || row.ships_home === "no";
-        const name = row.url ? `<a href="${row.url}" target="_blank" rel="noopener">${row.shop}</a>` : row.shop;
-        return `<tr class="${muted ? "muted" : ""}">
-          <td><div class="shop">${name}</div></td>
-          <td>${row.product_name}<div class="model">${modelLabel(row)}</div></td>
-          <td class="price">${fmt.format(row.price_chf)}<div class="note">${row.price_note}</div></td>
-          <td>${stockCell(row)}<div class="note">${row.stock_text}</div></td>
-          <td>${shipCell(row)}<div class="note">${row.fulfillment_note}</div></td>
-          <td>${zurich(row.checked_at)}</td>
-        </tr>`;
+      sel.innerHTML = '<option value="">All PortaSplit</option>' + models.map(function (m) { return "<option>" + m + "</option>"; }).join("");
+      if (Array.from(sel.options).some(function (o) { return o.value === current; })) sel.value = current;
+      const chShip = listings.filter(function (r) { return r.country === "CH" && r.usable && r.price != null; }).sort(function (a, b) { return a.price - b.price; })[0];
+      const deUse = listings.filter(function (r) { return r.country === "DE" && r.usable && r.price != null; }).sort(function (a, b) { return a.price - b.price; })[0];
+      document.getElementById("stats").innerHTML =
+        '<div class="stat"><strong>' + (chShip ? fmtCH.format(chShip.price) : "—") + '</strong><span>Cheapest CH shippable' + (chShip ? ", " + chShip.shop : "") + '</span></div>' +
+        '<div class="stat"><strong>' + (deUse ? fmtEU.format(deUse.price) : "—") + '</strong><span>Cheapest DE usable' + (deUse ? ", " + deUse.shop : "") + '</span></div>' +
+        '<div class="stat"><strong>' + payload.pins.filter(function (p) { return p.units != null; }).length + '</strong><span>Pins with a real unit count</span></div>' +
+        '<div class="stat"><strong>' + zurich(payload.updated_at) + '</strong><span>Prices pulled</span></div>';
+      const rows = listings.filter(passes).sort(function (a, b) {
+        if (a.country !== b.country) return a.country === "CH" ? -1 : 1;
+        return a.price - b.price;
+      });
+      document.getElementById("rows").innerHTML = rows.length ? rows.map(function (row) {
+        const muted = row.pickup_only || row.ships_home === "no" || !row.usable;
+        const name = row.url ? '<a href="' + row.url + '" target="_blank" rel="noopener">' + row.shop + '</a>' : row.shop;
+        return '<tr class="' + (muted ? "muted" : "") + '">' +
+          '<td><div class="shop">' + name + '</div><span class="badge ' + (row.country === "DE" ? "de" : "ok") + '">' + row.country + '</span></td>' +
+          '<td>' + row.product_name + '<div class="model">' + modelLabel(row) + '</div></td>' +
+          '<td class="price">' + money(row) + '<div class="note">' + row.price_note + '</div></td>' +
+          '<td>' + stockCell(row) + '<div class="note">' + row.stock_text + '</div></td>' +
+          '<td>' + shipCell(row) + '<div class="note">' + row.fulfillment_note + '</div></td>' +
+          '<td>' + zurich(row.checked_at) + '</td></tr>';
       }).join("") : '<tr><td class="empty" colspan="6">Nothing matches these filters.</td></tr>';
-      document.getElementById("meta").textContent = `${rows.length} shown · ${listings.length} readable listings · blocked shops omitted`;
+      document.getElementById("meta").textContent = rows.length + " shown · " + listings.length + " readable listings · blocked shops omitted";
     }
     function drawMap() {
-      if (!window.L) {
-        document.getElementById("map").textContent = "Map tiles did not load.";
-        return;
-      }
-      const map = L.map("map", { scrollWheelZoom: false }).setView([46.9, 8.2], 7);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 18,
-        attribution: "&copy; OpenStreetMap"
-      }).addTo(map);
-      payload.pins.forEach(pin => {
+      if (!window.L) { document.getElementById("map").textContent = "Map tiles did not load."; return; }
+      const map = L.map("map", { scrollWheelZoom: false }).setView([47.6, 8.5], 7);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "&copy; OpenStreetMap" }).addTo(map);
+      payload.pins.forEach(function (pin) {
         const mark = pin.units == null ? "?" : String(pin.units);
-        const icon = L.divIcon({ className: "", html: `<div class="pin">${mark}</div>`, iconSize: [28, 28] });
-        L.marker([pin.lat, pin.lon], { icon }).addTo(map).bindPopup(
-          `<strong>${pin.shop}</strong><br>${pin.address}<br>${pin.label}<br>Units: ${pin.units == null ? "?" : pin.units}`
-        );
+        const icon = L.divIcon({ className: "", html: '<div class="pin ' + (pin.country === "DE" ? "de" : "") + '">' + mark + '</div>', iconSize: [28, 28] });
+        L.marker([pin.lat, pin.lon], { icon: icon }).addTo(map).bindPopup("<strong>" + pin.shop + "</strong> (" + pin.country + ")<br>" + pin.address + "<br>" + pin.label + "<br>Units: " + (pin.units == null ? "?" : pin.units));
       });
     }
-    ["inStock", "ships", "max", "model"].forEach(id => {
+    ["inStock", "ships", "max", "model", "country"].forEach(function (id) {
       document.getElementById(id).addEventListener("input", render);
       document.getElementById(id).addEventListener("change", render);
     });
