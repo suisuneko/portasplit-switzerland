@@ -82,7 +82,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const payload = {
-  "updated_at": "2026-09-10T01:24:42Z",
+  "updated_at": "2026-09-10T04:50:48Z",
   "pins": [
     {
       "shop": "Interdiscount",
@@ -118,7 +118,7 @@
       "lat": 47.7538412,
       "lon": 8.8513444,
       "units": 23,
-      "label": "OBI store stock for PortaSplit Cool only: 23 Stück (API stock this pull). Classic stock 0 at this store."
+      "label": "OBI store stock for PortaSplit Cool only: 23 Stück (PDP ?storeId=365 Nuxt payload this pull). Classic stock 0 at this store. Displayed store price Cool EUR 999.99."
     },
     {
       "shop": "OBI Freiburg Süd",
@@ -127,7 +127,7 @@
       "lat": 47.9900631,
       "lon": 7.793273,
       "units": 0,
-      "label": "Cool and Classic: stock 0 (zzt. nicht auf Lager) this pull."
+      "label": "Cool and Classic: stock 0 (OutOfStock / zzt. nicht auf Lager pattern) this pull via ?storeId=061."
     }
   ],
   "listings": [
@@ -140,15 +140,15 @@
       "kw": null,
       "btu": 8000,
       "price": 999.95,
-      "price_note": "CHF 999.95 from Interdiscount OCC JSON. VAT not stated.",
+      "price_note": "CHF 999.95 from Interdiscount OCC JSON (insteadPrice 1799.95). VAT not stated.",
       "stock": "in_stock",
-      "stock_text": "INSTOCK, purchasable, deliveryDays 5. API stockLevel is not a branch count.",
+      "stock_text": "INSTOCK, purchasable true, deliveryDays 5, stockLevel 20. API stockLevel is not a branch count.",
       "ships_home": "unknown",
       "pickup_only": false,
       "usable": false,
       "fulfillment_note": "Home delivery not confirmed (neutralDeliveryPossible false).",
       "url": "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "CH",
@@ -159,7 +159,7 @@
       "kw": 3.5,
       "btu": 12000,
       "price": 1199.95,
-      "price_note": "CHF 1'199.95 from Interdiscount OCC JSON. VAT not stated.",
+      "price_note": "CHF 1'199.95 from Interdiscount OCC JSON (insteadPrice 1999.95). VAT not stated.",
       "stock": "out_of_stock",
       "stock_text": "ONORDER, purchasable false, deliveryDays 56.",
       "ships_home": "no",
@@ -167,7 +167,7 @@
       "usable": false,
       "fulfillment_note": "Not currently deliverable.",
       "url": "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "CH",
@@ -178,15 +178,15 @@
       "kw": 3.5,
       "btu": 12000,
       "price": 1349,
-      "price_note": "CHF 1'349.00 from Shopify product.js.",
+      "price_note": "CHF 1'349.00 from Shopify product.js (price 134900 cents).",
       "stock": "unknown",
-      "stock_text": "Shopify available true. inventory_quantity null — stock not classified.",
+      "stock_text": "Shopify available true. inventory_quantity null — stock not classified. Tags: numberOfDeliveryDays_2, Shipment Method_LKW_PRIO.",
       "ships_home": "yes",
       "pickup_only": false,
       "usable": true,
-      "fulfillment_note": "Ships in Switzerland.",
+      "fulfillment_note": "Ships in Switzerland (Shopify de_CH shipment tags / LKW_PRIO).",
       "url": "https://ecofort.ch/products/midea-portasplit",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "CH",
@@ -203,9 +203,9 @@
       "ships_home": "yes",
       "pickup_only": false,
       "usable": true,
-      "fulfillment_note": "Ships. Pickup offered in Müstair, no unit count published.",
+      "fulfillment_note": "Ships (Swiss Post Cargo / Bordsteinkante notes on PDP). Pickup offered in Müstair, no unit count published.",
       "url": "https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "DE",
@@ -216,7 +216,7 @@
       "kw": 2.3,
       "btu": 8000,
       "price": 789.99,
-      "price_note": "EUR 789.99 (UVP 899). First-party Saturn (isProductOfTypeMarketplace false for 3035466).",
+      "price_note": "EUR 789.99 (discount 109.01 vs ~UVP 899). First-party Saturn (isProductOfTypeMarketplace false for 3035466).",
       "stock": "out_of_stock",
       "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock.",
       "ships_home": "no",
@@ -224,7 +224,7 @@
       "usable": false,
       "fulfillment_note": "Leider keine Lieferung möglich. Pickup needs a selected store; no border store stock verified this pull.",
       "url": "https://www.saturn.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "DE",
@@ -235,7 +235,7 @@
       "kw": 2.3,
       "btu": 8000,
       "price": 789.99,
-      "price_note": "EUR 789.99 (UVP 899). First-party MediaMarkt (isProductOfTypeMarketplace false for 3035466).",
+      "price_note": "EUR 789.99. First-party MediaMarkt (isProductOfTypeMarketplace false for 3035466).",
       "stock": "out_of_stock",
       "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock.",
       "ships_home": "no",
@@ -243,7 +243,7 @@
       "usable": false,
       "fulfillment_note": "Leider keine Lieferung möglich. No border store stock verified this pull.",
       "url": "https://www.mediamarkt.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "DE",
@@ -253,16 +253,16 @@
       "model": "PORTASPLIT COOL",
       "kw": 2.35,
       "btu": 8000,
-      "price": 899.99,
-      "price_note": "EUR 899.99 inkl. 19% MwSt. from OBI PDP API.",
+      "price": 999.99,
+      "price_note": "EUR 999.99 inkl. 19% MwSt displayed at OBI Singen (store price). National/JSON-LD fallback EUR 899.99 when no store selected.",
       "stock": "in_stock",
-      "stock_text": "OBI Singen: 23 Stück. Freiburg Süd/Nord, Waldshut, Konstanz, Lindau: stock 0.",
+      "stock_text": "OBI Singen: 23 Stück (PDP ?storeId=365). Freiburg Süd/Nord, Waldshut, Konstanz, Lindau: stock 0.",
       "ships_home": "no",
       "pickup_only": true,
       "usable": true,
-      "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich (homeDeliveryAvailable false). Reservieren & Abholen only. Not ship-to-CH.",
+      "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich. Reservieren & Abholen only (Singen). Not ship-to-CH.",
       "url": "https://www.obi.de/p/2191158911022/midea-split-klimaanlage-portasplit-cool-mobil-weissgrau",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     },
     {
       "country": "DE",
@@ -273,7 +273,7 @@
       "kw": 3.5,
       "btu": 12000,
       "price": 899.99,
-      "price_note": "EUR 899.99 inkl. 19% MwSt. Art. 8620890.",
+      "price_note": "EUR 899.99 inkl. 19% MwSt. Art. 8620890 (PDP display / JSON-LD).",
       "stock": "out_of_stock",
       "stock_text": "Border-belt check: Freiburg Süd/Nord, Waldshut, Singen, Konstanz, Lindau all stock 0.",
       "ships_home": "no",
@@ -281,7 +281,7 @@
       "usable": false,
       "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich. Pickup-only when a market has stock.",
       "url": "https://www.obi.de/p/8620890/midea-mobile-split-klimaanlage-portasplit",
-      "checked_at": "2026-09-10T01:24:42Z"
+      "checked_at": "2026-09-10T04:50:48Z"
     }
   ]
 };
