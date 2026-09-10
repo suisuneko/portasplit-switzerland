@@ -82,7 +82,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const payload = {
-  "updated_at": "2026-09-10T04:50:48Z",
+  "updated_at": "2026-09-10T08:56:34Z",
   "pins": [
     {
       "shop": "Interdiscount",
@@ -127,7 +127,7 @@
       "lat": 47.9900631,
       "lon": 7.793273,
       "units": 0,
-      "label": "Cool and Classic: stock 0 (OutOfStock / zzt. nicht auf Lager pattern) this pull via ?storeId=061."
+      "label": "Cool and Classic: stock 0 (OutOfStock / Nuxt stock=0) this pull via ?storeId=061."
     }
   ],
   "listings": [
@@ -148,7 +148,7 @@
       "usable": false,
       "fulfillment_note": "Home delivery not confirmed (neutralDeliveryPossible false).",
       "url": "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-cool-70-m3-8000-btu-h-eu-version-0014514094",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "CH",
@@ -161,13 +161,13 @@
       "price": 1199.95,
       "price_note": "CHF 1'199.95 from Interdiscount OCC JSON (insteadPrice 1999.95). VAT not stated.",
       "stock": "out_of_stock",
-      "stock_text": "ONORDER, purchasable false, deliveryDays 56.",
-      "ships_home": "no",
+      "stock_text": "ONORDER, purchasable true, deliveryDays 63, stockLevel 200. API stockLevel is not a branch count.",
+      "ships_home": "unknown",
       "pickup_only": false,
       "usable": false,
-      "fulfillment_note": "Not currently deliverable.",
+      "fulfillment_note": "Home delivery not confirmed (neutralDeliveryPossible false). Long ONORDER lead time (63 days).",
       "url": "https://www.interdiscount.ch/de/product/midea-klimageraet-portasplit-105-m3-12000-btu-h-0014227750",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "CH",
@@ -186,7 +186,7 @@
       "usable": true,
       "fulfillment_note": "Ships in Switzerland (Shopify de_CH shipment tags / LKW_PRIO).",
       "url": "https://ecofort.ch/products/midea-portasplit",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "CH",
@@ -203,9 +203,9 @@
       "ships_home": "yes",
       "pickup_only": false,
       "usable": true,
-      "fulfillment_note": "Ships (Swiss Post Cargo / Bordsteinkante notes on PDP). Pickup offered in Müstair, no unit count published.",
+      "fulfillment_note": "Ships (Swiss Post Cargo / Bordsteinkante notes on PDP). Company address listed in Müstair; no unit count published.",
       "url": "https://www.venova.ch/de/raumklima/heizluefter/198878/midea-portasplit-split-klimaanlage-12.000-btu-kuehlen-a-heizen-a",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "DE",
@@ -218,13 +218,13 @@
       "price": 789.99,
       "price_note": "EUR 789.99 (discount 109.01 vs ~UVP 899). First-party Saturn (isProductOfTypeMarketplace false for 3035466).",
       "stock": "out_of_stock",
-      "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock.",
+      "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock. deliveryStatus NOT_AVAILABLE.",
       "ships_home": "no",
       "pickup_only": true,
       "usable": false,
       "fulfillment_note": "Leider keine Lieferung möglich. Pickup needs a selected store; no border store stock verified this pull.",
       "url": "https://www.saturn.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "DE",
@@ -237,13 +237,13 @@
       "price": 789.99,
       "price_note": "EUR 789.99. First-party MediaMarkt (isProductOfTypeMarketplace false for 3035466).",
       "stock": "out_of_stock",
-      "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock.",
+      "stock_text": "TEMPORARILY_NOT_AVAILABLE / OutOfStock. deliveryStatus NOT_AVAILABLE.",
       "ships_home": "no",
       "pickup_only": true,
       "usable": false,
       "fulfillment_note": "Leider keine Lieferung möglich. No border store stock verified this pull.",
       "url": "https://www.mediamarkt.de/de/product/_midea-portasplit-cool-split-klimaanlage-weissgrau-max-raumgrosse-70-m-3035466.html",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "DE",
@@ -260,9 +260,9 @@
       "ships_home": "no",
       "pickup_only": true,
       "usable": true,
-      "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich. Reservieren & Abholen only (Singen). Not ship-to-CH.",
+      "fulfillment_note": "Lieferung nach Hause / Derzeit nicht möglich on PDP. Reservieren & Abholen only (Singen). Not ship-to-CH.",
       "url": "https://www.obi.de/p/2191158911022/midea-split-klimaanlage-portasplit-cool-mobil-weissgrau",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     },
     {
       "country": "DE",
@@ -279,9 +279,9 @@
       "ships_home": "no",
       "pickup_only": true,
       "usable": false,
-      "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich. Pickup-only when a market has stock.",
+      "fulfillment_note": "Lieferung nach Hause derzeit nicht möglich (homeDeliveryAvailable false). Pickup-only when a market has stock.",
       "url": "https://www.obi.de/p/8620890/midea-mobile-split-klimaanlage-portasplit",
-      "checked_at": "2026-09-10T04:50:48Z"
+      "checked_at": "2026-09-10T08:56:34Z"
     }
   ]
 };
